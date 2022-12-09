@@ -2,7 +2,7 @@ import sqlite3
 from dataclasses import asdict
 from typing import Any
 
-from RequsetHandler.DBTypes import DBObjectBase
+from RequestHandler.DBTypes import DBObjectBase
 
 
 class RequestHandler:
