@@ -25,7 +25,7 @@ class Student(DBObjectBase):
 
 
 @dataclass(frozen=True)
-class Schedule(DBObjectBase):
+class ScheduleRecord(DBObjectBase):
     class_number: int
     begin_time: datetime.datetime
     end_time: datetime.datetime
