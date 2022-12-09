@@ -22,6 +22,13 @@ class DataHandler:
         self.__rh.delete_all("Students", f"student_id = {student_id}")
 
 
+    def add_group(self, group: Group):
+        self.__rh.insert_one("Groups", group, "group_name")
+
+    def delete_group(self, group_id: int):
+        self.__rh.delete_all("Group", f"group_id = {group_id}")
+
+
     def add_schedule_record(self, record: ScheduleRecord):
         self.__rh.insert_one("Schedule", record)
 

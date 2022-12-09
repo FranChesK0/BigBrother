@@ -30,3 +30,9 @@ class ScheduleRecord(DBObjectBase):
     begin_time: datetime.datetime
     end_time: datetime.datetime
     group_id: int
+
+
+@dataclass(frozen=True)
+class Group(DBObjectBase):
+    group_id: int
+    group_name: str
