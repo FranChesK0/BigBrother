@@ -31,7 +31,7 @@ class RequestHandler:
         If `fields` is not empty, insert only given object fields.
         """
 
-        cursor = self.connection.cursor()
+        cursor: sqlite3.Cursor = self.connection.cursor()
 
         try:
             obj_dict: dict[str] = asdict(obj)
@@ -60,7 +60,7 @@ class RequestHandler:
         If `fields` is not empty, insert only given object fields.
         """
 
-        cursor = self.connection.cursor()
+        cursor: sqlite3.Cursor = self.connection.cursor()
 
         try:
             f: tuple[str] = fields if len(fields) else asdict(objs[0]).keys()
@@ -86,8 +86,29 @@ class RequestHandler:
             cursor.close()
 
 
-    def update(self, table_name: str, fields: list[str], data: list[DBObjectBase]):
-        pass
+    def update(self, table_name: str,
+                            data: dict[str, Any],
+                            condition: str):
+        if len(data) == 0:
+            return
+
+        cursor: sqlite3.Cursor = self.connection.cursor()
+
+        try:
+            query: str = "UPDATE {} SET {} WHERE {}".format(
+                table_name,
+                ','.join(f"{field}={value}" for field, value in data.items()),
+                condition
+            )
+            cursor.execute(query)
+
+        except Exception as e:
+            # add logging
+            pass
+
+        finally:
+            self.connection.commit()
+            cursor.close()
 
 
     def select_one(self, table_name: str, condition: str, *fields: str) -> Any:
@@ -96,7 +117,7 @@ class RequestHandler:
         If `fields` is not empty, select only given table fields.
         """
 
-        cursor = self.connection.cursor()
+        cursor: sqlite3.Cursor = self.connection.cursor()
 
         try:
             query: str = "SELECT {} FROM {} WHERE {}".format(
@@ -121,7 +142,7 @@ class RequestHandler:
         If `fields` is not empty, select only given table fields.
         """
 
-        cursor = self.connection.cursor()
+        cursor: sqlite3.Cursor = self.connection.cursor()
 
         try:
             query: str = "SELECT {} FROM {} WHERE {}".format(
