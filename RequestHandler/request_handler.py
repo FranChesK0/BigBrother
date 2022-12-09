@@ -161,5 +161,30 @@ class RequestHandler:
         finally:
             return data
 
+
+    def delete_all(self, table_name: str, condition: str | None = None) -> None:
+        """
+        Delete all records from `table_name` satisfying the `condition`.
+        If `condition` is `None` clear `table_name`.
+        """
+
+        cursor: sqlite3.Cursor = self.connection.cursor()
+
+        try:
+            query: str = "DELETE FROM {} {}".format(
+                table_name,
+                f"WHERE {condition}" if condition else ""
+            )
+            cursor.execute(query)
+
+        except sqlite3.ProgrammingError:
+            # add logging
+            pass
+
+        finally:
+            self.connection.commit()
+            cursor.close()
+
+
     def is_connected(self) -> bool:
         return self.connection is not None
