@@ -24,7 +24,6 @@ class RequestHandler:
         finally:
             return
 
-
     def insert_one(self, table_name: str, obj: DBObjectBase, *fields: str):
         """
         Insert one new record given from `obj` to the `table_name`.
@@ -85,7 +84,6 @@ class RequestHandler:
             self.connection.commit()
             cursor.close()
 
-
     def update(self, table_name: str,
                             data: dict[str, Any],
                             condition: str):
@@ -109,7 +107,6 @@ class RequestHandler:
         finally:
             self.connection.commit()
             cursor.close()
-
 
     def select_one(self, table_name: str, condition: str, *fields: str) -> Any:
         """
@@ -161,7 +158,6 @@ class RequestHandler:
         finally:
             return data
 
-
     def delete_all(self, table_name: str, condition: str | None = None) -> None:
         """
         Delete all records from `table_name` satisfying the `condition`.
@@ -184,7 +180,6 @@ class RequestHandler:
         finally:
             self.connection.commit()
             cursor.close()
-
 
     def is_connected(self) -> bool:
         return self.connection is not None

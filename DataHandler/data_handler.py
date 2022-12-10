@@ -1,10 +1,10 @@
 from RequestHandler.request_handler import RequestHandler
 from RequestHandler.DBTypes import Student, ScheduleRecord, Group
 
+
 class DataHandler:
     def __init__(self, db_path: str) -> None:
         self.__rh: RequestHandler = RequestHandler(db_path)
-
 
     def add_student(self, student: Student):
         self.__rh.insert_one(
@@ -21,13 +21,11 @@ class DataHandler:
     def delete_student(self, student_id: int):
         self.__rh.delete_all("Students", f"student_id = {student_id}")
 
-
     def add_group(self, group: Group):
         self.__rh.insert_one("Groups", group, "group_name")
 
     def delete_group(self, group_id: int):
         self.__rh.delete_all("Group", f"group_id = {group_id}")
-
 
     def add_schedule_record(self, record: ScheduleRecord):
         self.__rh.insert_one("Schedule", record)

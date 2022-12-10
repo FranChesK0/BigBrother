@@ -7,6 +7,7 @@ from abc import ABC
 class DBObjectBase(ABC):
     pass
 
+
 @dataclass(frozen=True)
 class Attend(DBObjectBase):
     student_id: int
