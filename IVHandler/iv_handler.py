@@ -1,5 +1,6 @@
 import datetime
 import pickle
+from abc import ABC, abstractmethod
 
 import cv2
 import face_recognition
@@ -72,3 +73,17 @@ class IVHandler:
 
             self.requests.insert_many("Attends", self.upload_data)
             self.class_number = (self.class_number + 1) % 7
+
+
+class BaseShow(ABC):
+    @staticmethod
+    @abstractmethod
+    def show(data: set[str]):
+        raise NotImplementedError
+    
+
+class ConsoleShow(BaseShow):
+    @staticmethod
+    def show(data: set[str]):
+        print('\n' * 100)
+        [print(elem) for elem in data]
