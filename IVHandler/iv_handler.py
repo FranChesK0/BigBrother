@@ -69,7 +69,7 @@ class IVHandler:
                         cur_len_marked = len(self.marked)
                         show_method(self.marked)
 
-                    if datetime.datetime(current_class.end_time) <= datetime.datetime.now():
+                    if datetime.datetime.strptime(str(current_class.end_time), "%Y-%m-%d %H:%M:%S") <= datetime.datetime.now():
                         break
 
                 self.requests.insert_many("Attends", self.upload_data)
