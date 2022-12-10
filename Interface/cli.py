@@ -35,12 +35,12 @@ class MainMenu:
             print("[2] Студенты")
             print("[3] Группы")
             print("[4] Посещения")
-            print("[5] Выход из программы")
+            print("[0] Выход из программы")
 
             choice: str = input("Ваш выбор: ")            
             print("\033[H\033[2J", end="")
 
-            if (choice == "5"):
+            if (choice == "0"):
                 break
 
             action = self.actions.get(choice)
@@ -57,31 +57,29 @@ class ScheduleMenu:
         while (True):
             print("\033[H\033[2J", end="")
 
-            print("[S] Показать расписание")
-            print("[C] Очистить расписание")
-            print("[A] Добавить пару")
-            print("[E] Редактировать пару")
-            print("[R] Удалить пару")
-            print("[B] Вернуться назад")
+            print("[1] Показать расписание")
+            print("[2] Очистить расписание")
+            print("[3] Добавить пару")
+            print("[0] Вернуться назад")
 
             choice: str = input("Ваш выбор: ")
 
             print("\033[H\033[2J", end="")
-            if (choice == "S"):
+            if (choice == "1"):
                 schedule: list[ScheduleRecord] = self.__dh.get_schedule()
                 if (len(schedule) == 0):
                     print("Расписание пусто")
                 else:
-                    for r in self.__dh.get_schedule():
+                    for r in schedule:
                         print("[{}] Группа {}; С {} до {}".format(
                             r.class_number, r.group_id, r.begin_time, r.end_time
                         ))
 
-            elif (choice == "C"):
+            elif (choice == "2"):
                 self.__dh.clear_schedule()
                 print("Расписание очищено")
 
-            elif (choice == "A"):
+            elif (choice == "3"):
                 cn: int = int(input("Введите номер пары: "))
                 gi: int = int(input("Введите номер группы: "))
 
@@ -90,7 +88,7 @@ class ScheduleMenu:
                     self.get_dt(date, timestamps[cn+1]), gi
                 ))
 
-            elif (choice == "B"):
+            elif (choice == "0"):
                 break
 
             else:
