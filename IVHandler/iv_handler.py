@@ -9,7 +9,7 @@ from RequestHandler.DBTypes import ScheduleRecord, Student, Attend
 from RequestHandler.request_handler import RequestHandler
 
 
-class BaseIVHandler(ABC):
+class IVHandler:
     def __init__(self, database: str):
         self.requests = RequestHandler(database)
         self.face_cascade = cv2.CascadeClassifier('C:\PrgFiles\BigBrother\haarcascade_frontalface_alt2.xml')
@@ -23,7 +23,7 @@ class BaseIVHandler(ABC):
         self.video_capture.release()
         cv2.destroyAllWindows()
 
-    def run(self):
+    def run(self, show_method: callable(set[str])):
         while True:
             response = self.requests.select_one("Schedule", f"class_number = {self.class_number}")
             if response is not None:
@@ -44,7 +44,7 @@ class BaseIVHandler(ABC):
                         matches = face_recognition.compare_faces([pickle.loads(student.face)
                                                                   for student in students], encoding)
 
-                        if any(matches):
+                        if True in matches:
                             matched_ids = [i for i, b in enumerate(matches) if b]
                             counts = {}
 
@@ -66,7 +66,7 @@ class BaseIVHandler(ABC):
 
                     if self.marked != cur_len_marked:
                         cur_len_marked = len(self.marked)
-                        self.__show_students()
+                        show_method(self.marked)
 
                     if current_class.end_time <= datetime.datetime.now():
                         break
@@ -74,10 +74,16 @@ class BaseIVHandler(ABC):
             self.requests.insert_many("Attends", self.upload_data)
             self.class_number = (self.class_number + 1) % 7
 
-    def __show_students(self):
+
+class BaseShow(ABC):
+    @staticmethod
+    @abstractmethod
+    def show(data: set[str]):
         raise NotImplementedError
+    
 
-
-class ConsoleIVHandler(BaseIVHandler):
-    def __show_students(self):
-        [print(student) for student in self.marked]
+class ConsoleShow(BaseShow):
+    @staticmethod
+    def show(data: set[str]):
+        print('\n' * 100)
+        [print(elem) for elem in data]
