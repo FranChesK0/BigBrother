@@ -7,12 +7,13 @@ import face_recognition
 
 from RequestHandler.DBTypes import ScheduleRecord, Student, Attend
 from RequestHandler.request_handler import RequestHandler
+from constants import CASCADE_PATH
 
 
 class IVHandler:
     def __init__(self, database: str):
         self.requests = RequestHandler(database)
-        self.face_cascade = cv2.CascadeClassifier('C:\PrgFiles\BigBrother\haarcascade_frontalface_alt2.xml')
+        self.face_cascade = cv2.CascadeClassifier(CASCADE_PATH)
         self.video_capture = cv2.VideoCapture(0)
 
         self.class_number = 0
@@ -80,7 +81,7 @@ class BaseShow(ABC):
     @abstractmethod
     def show(data: set[str]):
         raise NotImplementedError
-    
+
 
 class ConsoleShow(BaseShow):
     @staticmethod
