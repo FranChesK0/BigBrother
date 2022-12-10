@@ -45,7 +45,7 @@ class IVHandler:
                         matches = face_recognition.compare_faces([pickle.loads(student.face)
                                                                   for student in students], encoding)
 
-                        if True in matches:
+                        if any(matches):
                             matched_ids = [i for i, b in enumerate(matches) if b]
                             counts = {}
 
@@ -69,10 +69,10 @@ class IVHandler:
                         cur_len_marked = len(self.marked)
                         show_method(self.marked)
 
-                    if current_class.end_time <= datetime.datetime.now():
+                    if datetime.datetime(current_class.end_time) <= datetime.datetime.now():
                         break
 
-            self.requests.insert_many("Attends", self.upload_data)
+                self.requests.insert_many("Attends", self.upload_data)
             self.class_number = (self.class_number + 1) % 7
 
 
