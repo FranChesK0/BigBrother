@@ -6,6 +6,13 @@ class DataHandler:
     def __init__(self, db_path: str) -> None:
         self.__rh: RequestHandler = RequestHandler(db_path)
 
+    def get_student(self, student_id: int) -> Student | None:
+        r = self.__rh.select_one(
+            "Schedule", f"student_id = {student_id}"
+        )
+
+        return Student(*r) if r else None
+
     def add_student(self, student: Student):
         self.__rh.insert_one(
             "Students", student,
@@ -29,6 +36,16 @@ class DataHandler:
 
     def add_schedule_record(self, record: ScheduleRecord):
         self.__rh.insert_one("Schedule", record)
+
+    def get_schedule(self) -> list[ScheduleRecord]:
+        return [ScheduleRecord(*r) for r in self.__rh.select_all("Schedule")]
+
+    def get_schedule_record(self, class_number: int) -> ScheduleRecord | None:
+        r = self.__rh.select_one(
+            "Schedule", f"class_number = {class_number}"
+        )
+
+        return ScheduleRecord(*r) if r else None
 
     def add_schedule(self, schedule: list[ScheduleRecord]):
         self.__rh.insert_many("Schedule", schedule)
