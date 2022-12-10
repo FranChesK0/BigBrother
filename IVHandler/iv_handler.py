@@ -74,7 +74,6 @@ class BaseIVHandler(ABC):
             self.requests.insert_many("Attends", self.upload_data)
             self.class_number = (self.class_number + 1) % 7
 
-    @abstractmethod
     def __show_students(self):
         raise NotImplementedError
 
