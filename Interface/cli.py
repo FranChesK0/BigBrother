@@ -18,10 +18,12 @@ class MainMenu:
 
         self.__schedule_menu: ScheduleMenu = ScheduleMenu(self.__dh)
         self.__students_menu: StudentsMenu = StudentsMenu(self.__dh)
+        self.__groups_menu: GroupsMenu = GroupsMenu(self.__dh)
 
         self.actions: dict[str] = {
             "1": lambda: self.__schedule_menu.run(),
             "2": lambda: self.__students_menu.run(),
+            "3": lambda: self.__groups_menu.run()
         }
 
     def run(self) -> None:
@@ -134,6 +136,43 @@ class StudentsMenu:
                 self.__dh.delete_student(student_id)
 
                 print(f"Студент с id: {student_id} удален")
+
+            elif (choice == "0"):
+                break
+
+            else:
+                continue
+
+            input("\nНажмите Enter, Чтобы продолжить")
+
+
+class GroupsMenu:
+    def __init__(self, dh: DataHandler) -> None:
+        self.__dh: DataHandler = dh
+
+    def run(self) -> None:
+        while (True):
+            print("\033[H\033[2J", end="")
+
+            print("[1] Показать студентов группы")
+            print("[0] Вернуться назад")
+
+            choice: str = input("\nВаш выбор: ")
+
+            print("\033[H\033[2J", end="")
+            if (choice == "1"):
+                gi: int = int(input("Введите номер группы: "))
+
+                students: list[Student] = self.__dh.get_students(gi)
+                if (len(students) == 0):
+                    print("В группе никого нет")
+                else:
+                    print(f"Группа №{gi}:")
+                    for r in students:
+                        print("[id {}] Студент {} {} {}".format(
+                            r.student_id, r.last_name,
+                            r.first_name, r.middle_name
+                        ))
 
             elif (choice == "0"):
                 break
