@@ -111,7 +111,7 @@ class RequestHandler:
         If `fields` is not empty, select only given table fields.
         """
 
-        r = self.select_all(table_name, condition, *fields)[0]
+        r = self.select_all(table_name, condition, *fields)
 
         return r[0] if len(r) else None
 
