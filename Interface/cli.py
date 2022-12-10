@@ -1,7 +1,8 @@
 import datetime
 
 from DataHandler.data_handler import DataHandler
-from RequestHandler.DBTypes import ScheduleRecord
+from RequestHandler.DBTypes import Student, ScheduleRecord
+from EncodingHandler.encoding_handler import FaceEncoding
 
 
 date: datetime.date = datetime.date(2022, 12, 12)
@@ -16,9 +17,11 @@ class MainMenu:
         self.__dh: DataHandler = DataHandler(db_path)
 
         self.__schedule_menu: ScheduleMenu = ScheduleMenu(self.__dh)
+        self.__students_menu: StudentsMenu = StudentsMenu(self.__dh)
 
         self.actions: dict[str] = {
             "1": lambda: self.__schedule_menu.run(),
+            "2": lambda: self.__students_menu.run(),
         }
 
     def run(self) -> None:
@@ -99,3 +102,43 @@ class ScheduleMenu:
             date.year, date.month, date.day,
             time.hour, time.minute
         )
+
+
+class StudentsMenu:
+    def __init__(self, dh: DataHandler) -> None:
+        self.__dh: DataHandler = dh
+
+    def run(self) -> None:
+        while (True):
+            print("\033[H\033[2J", end="")
+
+            print("[1] Добавить студента")
+            print("[2] Удалить студента")
+            print("[0] Вернуться назад")
+
+            choice: str = input("\nВаш выбор: ")
+
+            print("\033[H\033[2J", end="")
+            if (choice == "1"):
+                gi: int = int(input("Введите номер группы: "))
+                ln, fn, mn = input("Введите ФИО студента: ").split()
+                img_path: str = input("Введите путь до фото студента: ")
+
+                self.__dh.add_student(Student(
+                    0, gi, ln, fn, mn,
+                    FaceEncoding.get_face_encoding(img_path)
+                ))
+
+            elif (choice == "2"):
+                student_id: int = int(input("Введите id студента: "))
+                self.__dh.delete_student(student_id)
+
+                print(f"Студент с id: {student_id} удален")
+
+            elif (choice == "0"):
+                break
+
+            else:
+                continue
+
+            input("\nНажмите Enter, Чтобы продолжить")
