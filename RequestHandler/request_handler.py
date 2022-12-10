@@ -86,17 +86,17 @@ class RequestHandler:
 
     def update(self, table_name: str,
                             data: dict[str, Any],
-                            condition: str):
+                            condition: str | None = None):
         if len(data) == 0:
             return
 
         cursor: sqlite3.Cursor = self.connection.cursor()
 
         try:
-            query: str = "UPDATE {} SET {} WHERE {}".format(
+            query: str = "UPDATE {} SET {} {}".format(
                 table_name,
                 ','.join(f"{field}={value}" for field, value in data.items()),
-                condition
+                f"WHERE {condition}" if condition else ""
             )
             cursor.execute(query)
 
@@ -108,7 +108,7 @@ class RequestHandler:
             self.connection.commit()
             cursor.close()
 
-    def select_one(self, table_name: str, condition: str, *fields: str) -> Any:
+    def select_one(self, table_name: str, condition: str | None = None, *fields: str) -> Any:
         """
         Selects one record from `table_name` satisfying the `condition`.
         If `fields` is not empty, select only given table fields.
@@ -117,10 +117,10 @@ class RequestHandler:
         cursor: sqlite3.Cursor = self.connection.cursor()
 
         try:
-            query: str = "SELECT {} FROM {} WHERE {}".format(
+            query: str = "SELECT {} FROM {} {}".format(
                 ','.join(fields) if len(fields) else '*',
                 table_name,
-                condition
+                f"WHERE {condition}" if condition else ""
             )
             cursor.execute(query)
 
@@ -133,7 +133,7 @@ class RequestHandler:
         finally:
             return data
 
-    def select_all(self, table_name: str, condition: str, *fields: str) -> list[Any]:
+    def select_all(self, table_name: str, condition: str | None = None, *fields: str) -> list[Any]:
         """
         Selects all records from `table_name` satisfying the `condition`.
         If `fields` is not empty, select only given table fields.
@@ -142,10 +142,10 @@ class RequestHandler:
         cursor: sqlite3.Cursor = self.connection.cursor()
 
         try:
-            query: str = "SELECT {} FROM {} WHERE {}".format(
+            query: str = "SELECT {} FROM {} {}".format(
                 ','.join(fields) if len(fields) else '*',
                 table_name,
-                condition
+                f"WHERE {condition}" if condition else ""
             )
             cursor.execute(query)
 
