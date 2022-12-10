@@ -8,10 +8,15 @@ class DataHandler:
 
     def get_student(self, student_id: int) -> Student | None:
         r = self.__rh.select_one(
-            "Schedule", f"student_id = {student_id}"
+            "Students", f"student_id = {student_id}"
         )
 
         return Student(*r) if r else None
+
+    def get_students(self, group_id: int) -> list[Student]:
+        return [Student(*r) for r in self.__rh.select_all(
+            "Students", f"group_id = {group_id}"
+        )]
 
     def add_student(self, student: Student):
         self.__rh.insert_one(
